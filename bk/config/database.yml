@@ -14,15 +14,20 @@ default: &default
   encoding: utf8
   pool: 5
   username: root
-  password:
-  host: localhost
+  password: root
+  host: dbdevise.dev
+  port: 3306
+  socket: /tmp/mysql.sock
 
 development:
   <<: *default
+  # adapter: postgresql
+  # encoding: unicode
   database: myapp_development
-  username: root
-  password: root
-  host: database.dev
+  # pool: 5
+  # username: postgres
+  # password:
+  # host: dbdevise.dev
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".

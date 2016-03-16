@@ -1,25 +1,30 @@
-# db:
-#     image: postgres
-
-web:
+  proxy:
+    image: jwilder/nginx-proxy
+    ports:
+        - "80:80"
+        - "443:443"
+    volumes:
+        - /var/run/docker.sock:/tmp/docker.sock
+  web:
     build: .
     command: bundle exec rails s -p 3000 -b '0.0.0.0'
+    environment:
+        - VIRTUAL_HOST=devise.dev
     volumes:
       - .:/myapp
     ports:
       - "3000:3000"
     links:
-        - database:database.dev
-    # links:
-    #   - db
+      - database:dbdevise.dev
 
-database:
+  database:
     image: freshbooks/percona:5.5
     environment:
         - MYSQL_ROOT_PASSWORD=root
         - MYSQL_DATABASE=myapp_development
-        - VIRTUAL_HOST=database.dev
-    # volumes:
-    #     - 101pet-mysql:/var/lib/mysql
+        - VIRTUAL_HOST=dbdevise.dev
+    volumes:
+        - devise-mysql:/var/lib/mysql
+        - ./my.cnf:/etc/mysql/my.cnf
     ports:
         - "3306:3306"
